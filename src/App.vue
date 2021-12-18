@@ -1,7 +1,7 @@
 <template>
-  <v-app>
+  <!-- <v-app>
     <v-container>
-      <v-row align="center" justify="center">
+      <v-row align="center" justify="center" v-if="showUpload">
         <v-file-input
           chips
           multiple
@@ -9,10 +9,6 @@
           label="File(s)"
           v-model="file"
         ></v-file-input>
-        <!-- <p></p>
-        <p>Supported formats can be found here:</p>
-        <p><a target="_blank" href="https://developer.autodesk.com/en/docs/model-derivative/v2/overview/supported-translations/">https://developer.autodesk.com/en/docs/model-derivative/v2/overview/supported-translations/</a></p>
-     -->
       </v-row>
       <v-row align="center" justify="center">
         <v-col ali cols="6">
@@ -20,26 +16,36 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-app>
+  </v-app> -->
+  <ForgeViewer />
 </template>
 
 <script>
 import ForgeViewer from "./components/ForgeViewer";
-import { uploadFile } from "./components/ForgeViewerServices.js";
+import {
+  uploadFile,
+  isAuthenticated,
+  authenticateUser,
+} from "./components/ForgeViewerServices.js";
 export default {
   name: "App",
   components: {
     ForgeViewer,
   },
-
+  async beforeMount() {
+    if (!isAuthenticated()) {
+      await authenticateUser();
+    }
+  },
   data: () => ({
     actionString: "/api/forge/datamanagement/bucket/upload",
     file: null,
+    showUpload: false
   }),
   methods: {
     async uploadFile(file) {
       console.log(file);
-      uploadFile(file)
+      uploadFile(file);
     },
   },
 };

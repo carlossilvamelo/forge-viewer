@@ -1,14 +1,14 @@
 <template>
-  <v-container :v-if="myToken!= null && urn != null">
 
-    <forge-vuer :getAccessToken="getTokenAsync" :urn="urn" />
-  </v-container>
+    <div id="ForgeViewer" :v-if="myToken != null && urn != null">
+      <forge-vuer :getAccessToken="getTokenAsync" :urn="urn" />
+    </div>
 </template>
 
 <script>
 import ForgeVuer from "forge-vuer";
 import {
-    isAuthenticated,
+  isAuthenticated,
   authenticateUser,
   getToken,
 } from "./ForgeViewerServices.js";
@@ -21,22 +21,15 @@ export default {
   data: () => {
     return {
       myToken: null,
-      urn: null,
+      urn: "urn:adsk.objects:os.object:rqodjejxqjw7ryc4lzy4offvc0apa4jl_tutorial_bucket/projeto%20simples.rvt",
     };
   },
-  beforeMount() {
-    // var documentId = "urn:" + this.getUrlParameter("urn");
-   var documentId = "urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6bXktYnVja2V0L215LWF3ZXNvbWUtZm9yZ2UtZmlsZS5ydnQ"
-    console.log("carlos",decodeURIComponent("asdasd"))  
-    console.log(documentId);
-    this.urn = documentId;
-  },
+
   methods: {
     async getTokenAsync(onSuccess) {
       // An API call to retrieve a valid token should be
       // done here. A backend service might need to be implemented.
-      if(!isAuthenticated())
-        await authenticateUser();
+      if (!isAuthenticated()) await authenticateUser();
       const token = getToken();
       // For testing purposes, a valid token can be hardcoded but will
       // last a maximum of 1 hour (3600 seconds.)
@@ -49,7 +42,7 @@ export default {
      * we will use this to get the value of 'urn' from URL
      */
     getUrlParameter(name) {
-    console.log("carlos",decodeURIComponent("asdasd"))
+      console.log("carlos", decodeURIComponent("asdasd"));
       name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
       var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
       var results = regex.exec(location.search);

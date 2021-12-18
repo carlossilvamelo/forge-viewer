@@ -53,8 +53,8 @@ export const uploadFile = async (file) => {
     const url = `${OBJECT_URL}/objects/${fileName}`
     const config = {
         headers: {
-            'Content-Type': 'multipart/form-data',
-            "Authorization": getToken(),
+            'Content-Type': 'text/plain; charset=UTF-8',
+            "Authorization": `Bearer ${getToken()}`,
             "Content-Length": fileLength
         }
     }
