@@ -7,4 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'forge-viewer';
+  tiles: any[] = [
+    { text: 'menu', cols: 1, rows: 1, color: 'lightblue' }
+  ];
 }

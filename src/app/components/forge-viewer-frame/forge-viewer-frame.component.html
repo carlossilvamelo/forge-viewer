@@ -1,1 +1,5 @@
-<adsk-forge-viewer [viewerOptions]="viewerOptions" (onSelectionChanged)="selectionChanged()"></adsk-forge-viewer>
+<adsk-forge-viewer 
+[viewerOptions]="viewerOptions" 
+(onSelectionChanged)="selectionChanged($event)"
+(onDocumentChanged)="documentChanged($event)"
+(onDocumentOpened)="documentOpened($event)"></adsk-forge-viewer>

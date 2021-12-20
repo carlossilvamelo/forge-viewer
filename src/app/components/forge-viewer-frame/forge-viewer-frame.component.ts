@@ -74,11 +74,17 @@ export class ForgeViewerFrameComponent implements OnInit {
       //version: "7.41"
     }
   }
-  public selectionChanged() {
-  }
-  // public selectionChanged(event: SelectionChangedEventArgs) {
-  //   console.log(event.dbIdArray);
+  // public selectionChanged() {
   // }
+  public selectionChanged(event: any) {
+    console.log("selectionChanged",event);
+  }
+  public documentChanged(event: any){
+    console.log("documentChanged",event);
+  }
+  public documentOpened(event: any){
+    console.log("documentOpened", event);
+  }
 
   public async authenticateUser() {
 

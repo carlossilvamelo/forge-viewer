@@ -1,8 +1,14 @@
-
-
 <div role="banner">
-<h1>app</h1>
-<app-forge-viewer-frame></app-forge-viewer-frame>
+    <mat-grid-list cols="1" rowHeight="100px">
+        <mat-grid-tile 
+        [colspan]="tiles[0].cols" 
+        [style.background]="tiles[0].color">
+            {{tiles[0].text}}
+        </mat-grid-tile>
+    </mat-grid-list>
+    <app-forge-viewer-frame></app-forge-viewer-frame>
+
+    
 </div>
 
 
