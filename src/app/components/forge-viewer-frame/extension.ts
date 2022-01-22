@@ -20,7 +20,7 @@ export class MyExtension extends Extension {
  
   public load() {
     // Called when Forge Viewer loads your extension
-    console.log('MyExtension loaded!');
+    // console.log('MyExtension loaded!');
 
     this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, (e) => {
       if (e.dbIdArray.length) {
@@ -50,7 +50,7 @@ export class MyExtension extends Extension {
     }
 
     // Called when Forge Viewer unloads your extension
-    console.log('MyExtension unloaded.');
+    // console.log('MyExtension unloaded.');
     // Must return true or extension will fail to unload
     return true;
   }

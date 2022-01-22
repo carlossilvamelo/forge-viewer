@@ -33,11 +33,11 @@ export class ForgeViewerService {
 
         const promise = this.http.post(AUTH_URL, params, config).toPromise();
         await promise.then(function (response: any) {
-            console.log(response)
+            // console.log(response)
             localStorage.setItem(TOKEN_KEY, response.data.access_token)
-            console.log(response);
+            // console.log(response);
         }).catch(function (error) {
-            console.log(error);
+            // console.log(error);
         });
     }
 
@@ -64,11 +64,11 @@ export class ForgeViewerService {
         }
         const promise = this.http.put(url, file, config).toPromise();
         await promise.then(function (response: any) {
-            console.log(response)
+            // console.log(response)
             localStorage.setItem(TOKEN_KEY, response.data.access_token)
-            console.log(response);
+            // console.log(response);
         }).catch(function (error) {
-            console.log(error);
+            // console.log(error);
         });
 
     }

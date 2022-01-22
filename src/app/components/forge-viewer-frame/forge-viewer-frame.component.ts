@@ -32,16 +32,38 @@ const CREDENTIALS = {
 })
 export class ForgeViewerFrameComponent implements OnInit {
   name = "Angular Forge Viewer";
-  public viewerOptions: ViewerOptions = this.initViewerOptions();
+  public viewerOptions: any;
   public documentId: string | undefined;
-
+  public project: any;
+  public results: any;
   constructor(private http: HttpClient) { }
 
   public async ngOnInit() {
     const isAuthenticated = this.isAuthenticated()
-    console.log("isAuthenticated", isAuthenticated)
     if (!isAuthenticated)
       await this.authenticateUser()
+
+    await this.http.get("http://localhost:9090/execut/projects/1")
+      .toPromise()
+      .then(resp => {
+
+        this.project = resp
+        console.log(this.project)
+      }).catch(err => {
+        console.log(err)
+      });
+
+
+    await this.http.get("http://localhost:9090/execut/results/1")
+      .toPromise()
+      .then(resp => {
+        this.results = [resp]
+        console.log(this.results)
+      }).catch(err => {
+        console.log(err)
+      });
+
+    this.viewerOptions = this.initViewerOptions();
   }
   private initViewerOptions() {
     return {
@@ -66,7 +88,8 @@ export class ForgeViewerFrameComponent implements OnInit {
       //   Extension.registerExtension(MyExtension.extensionName, MyExtension);
       // },
       onViewerInitialized: (args: ViewerInitializedEvent) => {
-        args.viewerComponent.DocumentId = DOCUMENT_URN;
+        const URN = btoa(this.project.projectGeneralInfo.objectInfo.objectId)
+        args.viewerComponent.DocumentId = URN;
       },
       // showFirstViewable: false,
       // headlessViewer: true,
@@ -76,14 +99,53 @@ export class ForgeViewerFrameComponent implements OnInit {
   }
   // public selectionChanged() {
   // }
-  public selectionChanged(event: any) {
-    console.log("selectionChanged",event);
+  public async selectionChanged(event: any) {
+    if (event.nodeArray.length > 0) {
+      const mapList = await this.getUUIDFromSelectedItens(event)
+      
+      console.log("event", event);
+      console.log("------------------------------------");
+      console.log("mapList", mapList);
+    }
+
   }
-  public documentChanged(event: any){
-    console.log("documentChanged",event);
+
+  public async getUUIDFromSelectedItens(event: any){
+    const dbIdArray = event.dbIdArray as number[]
+    const mapList = await this.getExternalIds(event.model)
+    const keys = Object.keys(mapList)
+    return keys.filter(key => dbIdArray.includes(mapList[key]))
   }
-  public documentOpened(event: any){
+
+  public getExternalIds(
+    model: Autodesk.Viewing.Model
+  ): Promise<{ [key: string]: number }> {
+    return new Promise(function (resolve, reject) {
+      model.getExternalIdMapping(resolve, reject);
+    });
+  }
+  public async getExternalIdsMap(event: any) {
+    var mapList: any;
+    await this.getExternalIds(event.model)
+      .then(value => mapList = value);
+    return mapList;
+  }
+
+  public documentChanged(event: any) {
+    console.log("documentChanged", event);
+  }
+  public documentOpened(event: any) {
     console.log("documentOpened", event);
+  }
+  public onNavigationModeEvent(event: any) {
+    console.log("documentOpened", event);
+  }
+  public getAllDbIds(viewer: any) {
+    var instanceTree = viewer.model.getData().instanceTree;
+
+    var allDbIdsStr = Object.keys(instanceTree.nodeAccess.dbIdToIndex);
+
+    return allDbIdsStr.map(function (id) { return parseInt(id) });
   }
 
   public async authenticateUser() {
@@ -102,11 +164,11 @@ export class ForgeViewerFrameComponent implements OnInit {
 
     const promise = this.http.post(AUTH_URL, params, config).toPromise();
     await promise.then(function (response: any) {
-      console.log(response)
+      // console.log(response)
       localStorage.setItem(TOKEN_KEY, response.access_token)
-      console.log(response);
+      // console.log(response);
     }).catch(function (error) {
-      console.log(error);
+      // console.log(error);
     });
   }
 
@@ -133,11 +195,11 @@ export class ForgeViewerFrameComponent implements OnInit {
     }
     const promise = this.http.put(url, file, config).toPromise();
     await promise.then(function (response: any) {
-      console.log(response)
+      // console.log(response)
       localStorage.setItem(TOKEN_KEY, response.access_token)
-      console.log(response);
+      // console.log(response);
     }).catch(function (error) {
-      console.log(error);
+      // console.log(error);
     });
 
   }
